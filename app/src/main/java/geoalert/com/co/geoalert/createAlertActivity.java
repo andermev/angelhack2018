@@ -7,6 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import geoalert.com.co.geoalert.controller.CreateAlertController;
 import geoalert.com.co.geoalert.model.Warning;
 
@@ -17,6 +20,9 @@ public class createAlertActivity extends AppCompatActivity {
     EditText editTextTitle = (EditText) findViewById(R.id.alertTitle);
     EditText editTextDescription = (EditText) findViewById(R.id.alertDescription);
 
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("server/saving-data/fireblog");
+    DatabaseReference alertRef = ref.child("alerts");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +32,13 @@ public class createAlertActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 Warning alert = new Warning(
                         editTextTitle.getText().toString(),
                         editTextDescription.getText().toString()
                 );
+                alertRef.setValue(alert);
             }
         });
     }
