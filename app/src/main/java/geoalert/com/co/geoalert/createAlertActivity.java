@@ -32,12 +32,9 @@ public class createAlertActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                Warning alert = new Warning(
-                        editTextTitle.getText().toString(),
-                        editTextDescription.getText().toString()
-                );
+                Warning alert = new Warning( );
+                alert.setName( editTextTitle.getText().toString());
+                alert.setDescription(editTextDescription.getText().toString());
                 alertRef.setValue(alert);
             }
         });
