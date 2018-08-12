@@ -1,10 +1,18 @@
 package geoalert.com.co.geoalert.model;
 
-public class Warnings {
+public class Warning {
 
     private String name;
     private String description;
     private String ubication;
+
+    public Warning(){super();}
+
+    public Warning(String name,String description){
+        this.name=name;
+        this.description=description;
+    }
+
 
     public String getName() {
         return name;

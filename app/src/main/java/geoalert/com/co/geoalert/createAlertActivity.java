@@ -8,12 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import geoalert.com.co.geoalert.controller.CreateAlertController;
+import geoalert.com.co.geoalert.model.Warning;
 
 public class createAlertActivity extends AppCompatActivity {
 
     Button send = (Button)findViewById(R.id.Send);
     Button camera = (Button)findViewById(R.id.Camera);
     EditText editTextTitle = (EditText) findViewById(R.id.alertTitle);
+    EditText editTextDescription = (EditText) findViewById(R.id.alertDescription);
 
 
     @Override
@@ -24,7 +26,10 @@ public class createAlertActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title =  editTextTitle.getText().toString();
+                Warning alert = new Warning(
+                        editTextTitle.getText().toString(),
+                        editTextDescription.getText().toString()
+                );
             }
         });
     }
