@@ -15,14 +15,15 @@ import geoalert.com.co.geoalert.model.Warning;
 public class WarningDetail extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_warning_detail);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("alerts");
-        mDatabase.addValueEventListener(new ValueEventListener() {
+            ref.child("alerts").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Warning warning = dataSnapshot.getValue(Warning.class);
