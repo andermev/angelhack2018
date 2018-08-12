@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+    android:theme="@style/NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -11,8 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/colorPrimary">
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,13 +31,18 @@
                 android:id="@+id/tielUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:textColorHint="@color/colorAccent">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/tieUsuario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Usuario"
+                    android:shadowColor="@color/colorAccent"
+                    android:textColor="@color/common_google_signin_btn_text_dark_default"
+                    android:textColorHighlight="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent"
                     android:textColorLink="@color/common_google_signin_btn_text_dark_default" />
             </android.support.design.widget.TextInputLayout>
 
@@ -47,13 +50,17 @@
                 android:id="@+id/tielPass"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:textColorHint="@color/colorAccent">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/tiePassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
+                    android:shadowColor="@color/colorAccent"
+                    android:textColor="@color/colorAccent"
+                    android:textColorHighlight="@color/colorAccent"
                     android:textColorHint="@color/colorAccent"
                     android:textColorLink="@color/common_google_signin_btn_text_dark_default" />
             </android.support.design.widget.TextInputLayout>
