@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +40,7 @@ public class login extends AppCompatActivity {
     private TextInputLayout tielUsuario;
     private TextInputEditText tietPass;
     private TextInputLayout tielPass;
+    private Button btnLogin;
     private User user;
     Map<String,Object> useData = new HashMap<>();
 
@@ -48,11 +50,24 @@ public class login extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_login);
         initViews();
+        initLinsteners();
+    }
+
+    private void initLinsteners() {
+       btnLogin.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               procesarLogin(v);
+           }
+       });
     }
 
     private void initViews() {
-        tietUsuario = findViewById(R.id.tieUsuario);
-        tietPass = findViewById(R.id.tiePassword);
+        tietUsuario = findViewById(R.id.tietUsuario);
+        tielUsuario = findViewById(R.id.tielUsuario);
+        tietPass = findViewById(R.id.tietPass);
+        tielPass = findViewById(R.id.tielPass);
+        btnLogin = findViewById(R.id.loginPress);
     }
 
     public void udpateUsers() {
@@ -77,55 +92,70 @@ public class login extends AppCompatActivity {
         };
     }
 
-    private boolean validateForm(String email,String pass) {
-        if (TextUtils.isEmpty(email)) {
-            tielUsuario.setError("Faltan ingresar el correo Electronico");
-           return false;
-        } else  {
-            tietPass.setError(null);
-        }
+    private boolean validateForm() {
+            tielUsuario.setErrorEnabled(true);
+            tielPass.setErrorEnabled(true);
 
-        if (TextUtils.isEmpty(pass)) {
-            tietPass.setError("Faltan ingresar la contraseña");
-            return false;
-        } else  {
-            tietPass.setError(null);
-        }
-        return false;
+            if (tietUsuario.getText().toString().length() == 0) {
+                tielUsuario.setError("Falta");
+                return false;
+            }
+
+            if (tietPass.getText().toString().length() == 0) {
+                tielPass.setError("Falta");
+                return false;
+            }
+//        if (tietUsuario.getText().equals(""))
+//
+//        if (TextUtils.isEmpty(email)) {
+//            tielUsuario.setError("Faltan ingresar el correo Electronico");
+//           return false;
+//        } else  {
+//            tietPass.setError(null);
+//        }
+//
+//        if (TextUtils.isEmpty(pass)) {
+//            tietPass.setError("Faltan ingresar la contraseña");
+//            return false;
+//        } else  {
+//            tietPass.setError(null);
+//        }
+//        return false;
+        return  true;
     }
 
 
     public void procesarLogin(final View view) {
-        user.setEmail(tietUsuario.getText().toString().trim());
-        user.setPass(tietPass.getText().toString().trim());
+        if (validateForm()) {
+            user = new User();
+            user.setEmail(tietUsuario.getText().toString().trim());
+            user.setPass(tietPass.getText().toString().trim());
 
-        if (!validateForm(user.getEmail(),user.getPass())) {
-            return;
+            showProgressDialog("Estamos Validando los datos");
+            auth.signInWithEmailAndPassword(user.getEmail(),user.getPass())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = auth.getCurrentUser();
+                                Log.d("----TMM ","Succes: " + user);
+                                udpateUsers();
+                                startActivity(new Intent(login.this, MapActivity.class));
+                            } else {
+                                Log.w("---//Error: ", "signInWithEmail:failure", task.getException());
+                                Snackbar snackbar = Snackbar.make(view,"No Se pudo iniciar session",Snackbar.LENGTH_SHORT);
+                                snackbar.show();
+                            }
+
+                            if (!task.isSuccessful()) {
+                                Snackbar snackbar = Snackbar.make(view,"Correo o Contraseña incorrectos",Snackbar.LENGTH_SHORT);
+                                snackbar.show();
+                            }
+                            hideProgressDialog();
+                        }
+                    });
         }
 
-        showProgressDialog("Estamos Validando los datos");
-        auth.signInWithEmailAndPassword(user.getEmail(),user.getPass())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = auth.getCurrentUser();
-                            Log.d("----TMM ","Succes: " + user);
-                            udpateUsers();
-                            startActivity(new Intent(login.this, MapActivity.class));
-                        } else {
-                            Log.w("---//Error: ", "signInWithEmail:failure", task.getException());
-                            Snackbar snackbar = Snackbar.make(view,"No Se pudo iniciar session",Snackbar.LENGTH_SHORT);
-                            snackbar.show();
-                        }
-
-                        if (!task.isSuccessful()) {
-                            Snackbar snackbar = Snackbar.make(view,"Correo o Contraseña incorrectos",Snackbar.LENGTH_SHORT);
-                            snackbar.show();
-                        }
-                        hideProgressDialog();
-                    }
-                });
     }
 
     @VisibleForTesting
